@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.h.jq.mapper.AreasMapper">
+    
+    <resultMap type="Areas" id="AreasResult">
+        <result property="areaId"    column="area_id"    />
+        <result property="areaName"    column="area_name"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectAreasVo">
+        select area_id, area_name, created_at, updated_at from areas
+    </sql>
+
+    <select id="selectAreasList" parameterType="Areas" resultMap="AreasResult">
+        <include refid="selectAreasVo"/>
+        <where>  
+            <if test="areaName != null  and areaName != ''"> and area_name like concat('%', #{areaName}, '%')</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectAreasByAreaId" parameterType="Long" resultMap="AreasResult">
+        <include refid="selectAreasVo"/>
+        where area_id = #{areaId}
+    </select>
+
+    <insert id="insertAreas" parameterType="Areas" useGeneratedKeys="true" keyProperty="areaId">
+        insert into areas
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="areaName != null and areaName != ''">area_name,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="areaName != null and areaName != ''">#{areaName},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAreas" parameterType="Areas">
+        update areas
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="areaName != null and areaName != ''">area_name = #{areaName},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where area_id = #{areaId}
+    </update>
+
+    <delete id="deleteAreasByAreaId" parameterType="Long">
+        delete from areas where area_id = #{areaId}
+    </delete>
+
+    <delete id="deleteAreasByAreaIds" parameterType="String">
+        delete from areas where area_id in 
+        <foreach item="areaId" collection="array" open="(" separator="," close=")">
+            #{areaId}
+        </foreach>
+    </delete>
+
+<!--    在这里新增查询的-->
+    <!-- 查询区域及其关联的城市和地址信息 -->
+    <!-- 查询区域及其关联的城市和地址信息 -->
+    <select id="selectAreasWithCitiesAndAddresses" parameterType="Areas" resultMap="AreaWithCitiesAndAddressesResult">
+        SELECT
+        a.area_id,
+        a.area_name,
+        a.created_at as area_created_at,
+        a.updated_at as area_updated_at,
+        c.city_id,
+        c.city_name,
+        c.created_at as city_created_at,
+        c.updated_at as city_updated_at,
+        addr.address_id,
+        addr.address_text,
+        addr.created_at as address_created_at,
+        addr.updated_at as address_updated_at
+        FROM areas a
+        LEFT JOIN cities c ON a.area_id = c.area_id
+        LEFT JOIN addresses addr ON c.city_id = addr.city_id
+        <where>
+            <if test="areaName != null and areaName != ''">
+                AND a.area_name LIKE CONCAT('%', #{areaName}, '%')
+            </if>
+            <if test="createdAt != null">
+                AND a.created_at = #{createdAt}
+            </if>
+            <if test="updatedAt != null">
+                AND a.updated_at = #{updatedAt}
+            </if>
+        </where>
+        ORDER BY a.area_id, c.city_id, addr.address_id
+    </select>
+
+    <!-- 结果映射 -->
+    <resultMap id="AreaWithCitiesAndAddressesResult" type="com.h.jq.domain.DTO.AreaCreateDTO">
+        <id property="areaId" column="area_id"/>
+        <result property="areaName" column="area_name"/>
+        <result property="createdAt" column="area_created_at"/>
+        <result property="updatedAt" column="area_updated_at"/>
+
+        <collection property="cities" ofType="com.h.jq.domain.DTO.CityWithAddressesDTO">
+            <id property="cityId" column="city_id"/>
+            <result property="cityName" column="city_name"/>
+            <result property="createdAt" column="city_created_at"/>
+            <result property="updatedAt" column="city_updated_at"/>
+
+            <collection property="addresses" ofType="java.lang.String">
+                <result column="address_text"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+</mapper>
