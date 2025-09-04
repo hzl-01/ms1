@@ -58,4 +58,7 @@ public interface IAreasService
      * @return 结果
      */
     public int deleteAreasByAreaId(Long areaId);
+
+
+
 }
