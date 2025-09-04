@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jq.mapper.AreasMapper">
+    
+    <resultMap type="Areas" id="AreasResult">
+        <result property="areaId"    column="area_id"    />
+        <result property="areaName"    column="area_name"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectAreasVo">
+        select area_id, area_name, created_at, updated_at from areas
+    </sql>
+
+    <select id="selectAreasList" parameterType="Areas" resultMap="AreasResult">
+        <include refid="selectAreasVo"/>
+        <where>  
+            <if test="areaName != null  and areaName != ''"> and area_name like concat('%', #{areaName}, '%')</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectAreasByAreaId" parameterType="Long" resultMap="AreasResult">
+        <include refid="selectAreasVo"/>
+        where area_id = #{areaId}
+    </select>
+
+    <insert id="insertAreas" parameterType="Areas" useGeneratedKeys="true" keyProperty="areaId">
+        insert into areas
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="areaName != null and areaName != ''">area_name,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="areaName != null and areaName != ''">#{areaName},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAreas" parameterType="Areas">
+        update areas
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="areaName != null and areaName != ''">area_name = #{areaName},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where area_id = #{areaId}
+    </update>
+
+    <delete id="deleteAreasByAreaId" parameterType="Long">
+        delete from areas where area_id = #{areaId}
+    </delete>
+
+    <delete id="deleteAreasByAreaIds" parameterType="String">
+        delete from areas where area_id in 
+        <foreach item="areaId" collection="array" open="(" separator="," close=")">
+            #{areaId}
+        </foreach>
+    </delete>
+</mapper>
