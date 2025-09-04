@@ -49,8 +49,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <update id="updateCities" parameterType="Cities">
         update cities
+        <!--
+    注意：此方法现在会强制更新 area_id 字段，即使它为 null。
+    这可能会影响其他使用此方法的代码，请确保所有调用方都了解此行为。
+-->
         <trim prefix="SET" suffixOverrides=",">
-            <if test="areaId != null">area_id = #{areaId},</if>
+            <if test="areaId != null  or areaId == null">area_id = #{areaId},</if>
             <if test="cityName != null and cityName != ''">city_name = #{cityName},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
             <if test="updatedAt != null">updated_at = #{updatedAt},</if>

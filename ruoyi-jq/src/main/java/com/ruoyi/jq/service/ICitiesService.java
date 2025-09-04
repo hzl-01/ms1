@@ -2,6 +2,7 @@ package com.ruoyi.jq.service;
 
 import java.util.List;
 import com.ruoyi.jq.domain.Cities;
+import com.ruoyi.jq.domain.DTO.AreaCreateDTO;
 
 /**
  * 城市增删改查Service接口

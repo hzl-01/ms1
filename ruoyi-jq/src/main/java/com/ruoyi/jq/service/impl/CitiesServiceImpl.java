@@ -1,6 +1,8 @@
 package com.ruoyi.jq.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.jq.domain.DTO.AreaCreateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.jq.mapper.CitiesMapper;
@@ -90,4 +92,7 @@ public class CitiesServiceImpl implements ICitiesService
     {
         return citiesMapper.deleteCitiesByCityId(cityId);
     }
+
+
+
 }

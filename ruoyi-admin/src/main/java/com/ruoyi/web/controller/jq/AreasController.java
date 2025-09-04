@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.jq;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.jq.domain.DTO.AreaCreateDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +44,7 @@ public class AreasController extends BaseController
     public TableDataInfo list(Areas areas)
     {
         startPage();
-        List<Areas> list = areasService.selectAreasList(areas);
+        List<AreaCreateDTO> list = areasService.getAreaList();
         return getDataTable(list);
     }
 
@@ -66,7 +68,7 @@ public class AreasController extends BaseController
     @GetMapping(value = "/{areaId}")
     public AjaxResult getInfo(@PathVariable("areaId") Long areaId)
     {
-        return success(areasService.selectAreasByAreaId(areaId));
+        return success(areasService.getAreaDetailById(areaId));
     }
 
     /**
@@ -75,9 +77,9 @@ public class AreasController extends BaseController
     @PreAuthorize("@ss.hasPermi('jq:areas:add')")
     @Log(title = "区域", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Areas areas)
+    public AjaxResult add(@RequestBody AreaCreateDTO areaCreateDT)
     {
-        return toAjax(areasService.insertAreas(areas));
+        return toAjax(areasService.insertAreaByCityId( areaCreateDT));
     }
 
     /**
@@ -86,9 +88,9 @@ public class AreasController extends BaseController
     @PreAuthorize("@ss.hasPermi('jq:areas:edit')")
     @Log(title = "区域", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Areas areas)
+    public AjaxResult edit(@RequestBody AreaCreateDTO AreaCreateDTO)
     {
-        return toAjax(areasService.updateAreas(areas));
+        return toAjax(areasService.updateAreaByCityId(AreaCreateDTO));
     }
 
     /**
@@ -99,6 +101,8 @@ public class AreasController extends BaseController
 	@DeleteMapping("/{areaIds}")
     public AjaxResult remove(@PathVariable Long[] areaIds)
     {
-        return toAjax(areasService.deleteAreasByAreaIds(areaIds));
+        return toAjax(areasService.delelistorone(areaIds));
     }
+
+
 }

@@ -63,4 +63,58 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{areaId}
         </foreach>
     </delete>
+
+<!--    在这里新增查询的-->
+    <!-- 查询区域及其关联的城市和地址信息 -->
+    <!-- 查询区域及其关联的城市和地址信息 -->
+    <select id="selectAreasWithCitiesAndAddresses" parameterType="Areas" resultMap="AreaWithCitiesAndAddressesResult">
+        SELECT
+        a.area_id,
+        a.area_name,
+        a.created_at as area_created_at,
+        a.updated_at as area_updated_at,
+        c.city_id,
+        c.city_name,
+        c.created_at as city_created_at,
+        c.updated_at as city_updated_at,
+        addr.address_id,
+        addr.address_text,
+        addr.created_at as address_created_at,
+        addr.updated_at as address_updated_at
+        FROM areas a
+        LEFT JOIN cities c ON a.area_id = c.area_id
+        LEFT JOIN addresses addr ON c.city_id = addr.city_id
+        <where>
+            <if test="areaName != null and areaName != ''">
+                AND a.area_name LIKE CONCAT('%', #{areaName}, '%')
+            </if>
+            <if test="createdAt != null">
+                AND a.created_at = #{createdAt}
+            </if>
+            <if test="updatedAt != null">
+                AND a.updated_at = #{updatedAt}
+            </if>
+        </where>
+        ORDER BY a.area_id, c.city_id, addr.address_id
+    </select>
+
+    <!-- 结果映射 -->
+    <resultMap id="AreaWithCitiesAndAddressesResult" type="com.ruoyi.jq.domain.DTO.AreaCreateDTO">
+        <id property="areaId" column="area_id"/>
+        <result property="areaName" column="area_name"/>
+        <result property="createdAt" column="area_created_at"/>
+        <result property="updatedAt" column="area_updated_at"/>
+
+        <collection property="cities" ofType="com.ruoyi.jq.domain.DTO.CityWithAddressesDTO">
+            <id property="cityId" column="city_id"/>
+            <result property="cityName" column="city_name"/>
+            <result property="createdAt" column="city_created_at"/>
+            <result property="updatedAt" column="city_updated_at"/>
+
+            <collection property="addresses" ofType="java.lang.String">
+                <result column="address_text"/>
+            </collection>
+        </collection>
+    </resultMap>
+
 </mapper>

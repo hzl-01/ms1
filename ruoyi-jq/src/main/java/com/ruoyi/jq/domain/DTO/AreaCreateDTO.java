@@ -1,17 +1,38 @@
 package com.ruoyi.jq.domain.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class AreaCreateDTO {
     private Long areaId;
     private String areaName;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createdAt;   // 添加
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updatedAt;   // 添加
     private List<CityWithAddressesDTO> cities;
 
     // 默认构造函数
     public AreaCreateDTO() {
     }
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
     // 带参构造函数
     public AreaCreateDTO(Long areaId, String areaName, List<CityWithAddressesDTO> cities) {
         this.areaId = areaId;

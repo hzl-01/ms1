@@ -2,6 +2,8 @@ package com.ruoyi.jq.service;
 
 import java.util.List;
 import com.ruoyi.jq.domain.Areas;
+import com.ruoyi.jq.domain.DTO.AreaCreateDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 区域Service接口
@@ -60,5 +62,16 @@ public interface IAreasService
     public int deleteAreasByAreaId(Long areaId);
 
 
+    public int insertAreaByCityId(AreaCreateDTO areaCreateDTO);
 
+    AreaCreateDTO getAreaDetailById(Long areaId);
+
+    List<AreaCreateDTO> getAreaList();
+
+    //更新
+    @Transactional
+    int updateAreaByCityId(AreaCreateDTO dto);
+
+    @Transactional
+    int delelistorone(Long[] areaIds);
 }

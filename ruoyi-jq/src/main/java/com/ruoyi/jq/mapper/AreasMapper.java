@@ -2,6 +2,7 @@ package com.ruoyi.jq.mapper;
 
 import java.util.List;
 import com.ruoyi.jq.domain.Areas;
+import com.ruoyi.jq.domain.DTO.AreaCreateDTO;
 
 /**
  * 区域Mapper接口
@@ -58,4 +59,13 @@ public interface AreasMapper
      * @return 结果
      */
     public int deleteAreasByAreaIds(Long[] areaIds);
+
+
+    /**
+     * 查询区域及其关联的城市和地址信息
+     *
+     * @param areas 区域查询条件
+     * @return 区域列表
+     */
+    List<AreaCreateDTO> selectAreasWithCitiesAndAddresses(Areas areas);
 }

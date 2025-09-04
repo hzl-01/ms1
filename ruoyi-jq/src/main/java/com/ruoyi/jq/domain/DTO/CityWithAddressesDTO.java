@@ -1,19 +1,42 @@
 package com.ruoyi.jq.domain.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class CityWithAddressesDTO {
     private Long cityId;
+    private String cityName; // 新增字段
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createdAt;    // 添加
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updatedAt;    // 添加
     private List<String> addresses;
 
     // 默认构造函数
     public CityWithAddressesDTO() {
     }
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
     // 带参构造函数
-    public CityWithAddressesDTO(Long cityId, List<String> addresses) {
+    public CityWithAddressesDTO(Long cityId, String cityName, List<String> addresses) {
         this.cityId = cityId;
+        this.cityName = cityName;
         this.addresses = addresses;
     }
 
@@ -24,6 +47,14 @@ public class CityWithAddressesDTO {
 
     public void setCityId(Long cityId) {
         this.cityId = cityId;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public List<String> getAddresses() {
@@ -41,12 +72,13 @@ public class CityWithAddressesDTO {
         if (o == null || getClass() != o.getClass()) return false;
         CityWithAddressesDTO that = (CityWithAddressesDTO) o;
         return Objects.equals(cityId, that.cityId) &&
+                Objects.equals(cityName, that.cityName) &&
                 Objects.equals(addresses, that.addresses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cityId, addresses);
+        return Objects.hash(cityId, cityName, addresses);
     }
 
     // toString 方法
@@ -54,6 +86,7 @@ public class CityWithAddressesDTO {
     public String toString() {
         return "CityWithAddressesDTO{" +
                 "cityId=" + cityId +
+                ", cityName='" + cityName + '\'' +
                 ", addresses=" + addresses +
                 '}';
     }
