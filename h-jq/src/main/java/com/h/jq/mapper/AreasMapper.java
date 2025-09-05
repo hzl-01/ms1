@@ -64,8 +64,8 @@ public interface AreasMapper
     /**
      * 查询区域及其关联的城市和地址信息
      *
-     * @param areas 区域查询条件
+     * @param dto 区域查询条件
      * @return 区域列表
      */
-    List<AreaCreateDTO> selectAreasWithCitiesAndAddresses(Areas areas);
+    List<AreaCreateDTO> selectAreasWithCitiesAndAddresses(AreaCreateDTO dto);
 }

@@ -243,9 +243,9 @@ public class AreasServiceImpl implements IAreasService
 
 //返回列表
 @Override
-public List<AreaCreateDTO> getAreaList() {
+public List<AreaCreateDTO> getAreaList(AreaCreateDTO dto) {
     // 使用新的查询方法获取所有数据
-    return areasMapper.selectAreasWithCitiesAndAddresses(new Areas());
+    return areasMapper.selectAreasWithCitiesAndAddresses(dto);
 }
 
 //更新

@@ -67,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--    在这里新增查询的-->
     <!-- 查询区域及其关联的城市和地址信息 -->
     <!-- 查询区域及其关联的城市和地址信息 -->
-    <select id="selectAreasWithCitiesAndAddresses" parameterType="Areas" resultMap="AreaWithCitiesAndAddressesResult">
+    <select id="selectAreasWithCitiesAndAddresses" parameterType="AreaCreateDTO" resultMap="AreaWithCitiesAndAddressesResult">
         SELECT
         a.area_id,
         a.area_name,
@@ -88,6 +88,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="areaName != null and areaName != ''">
                 AND a.area_name LIKE CONCAT('%', #{areaName}, '%')
             </if>
+            <if test="cityName != null and cityName != ''">
+                AND c.city_name LIKE CONCAT('%', #{cityName}, '%')
+            </if>
+            <!-- 确保这里使用的是 addressName 而不是 address -->
+            <if test="addressName != null and addressName != ''">
+                AND addr.address_text LIKE CONCAT('%', #{addressName}, '%')
+            </if>
+            <!-- 保留原有的时间条件 -->
             <if test="createdAt != null">
                 AND a.created_at = #{createdAt}
             </if>

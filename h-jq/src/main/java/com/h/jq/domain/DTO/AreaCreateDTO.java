@@ -9,12 +9,28 @@ import java.util.Objects;
 public class AreaCreateDTO {
     private Long areaId;
     private String areaName;
+    private String cityName;
+    private String addressName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;   // 添加
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedAt;   // 添加
     private List<CityWithAddressesDTO> cities;
+    public String getCityName() {
+        return cityName;
+    }
 
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getaddressName() {
+        return addressName;
+    }
+
+    public void setaddressName(String address) {
+        this.addressName = address;
+    }
     // 默认构造函数
     public AreaCreateDTO() {
     }

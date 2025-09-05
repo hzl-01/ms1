@@ -66,7 +66,7 @@ public interface IAreasService
 
     AreaCreateDTO getAreaDetailById(Long areaId);
 
-    List<AreaCreateDTO> getAreaList();
+    List<AreaCreateDTO> getAreaList(AreaCreateDTO dto);
 
     //更新
     @Transactional

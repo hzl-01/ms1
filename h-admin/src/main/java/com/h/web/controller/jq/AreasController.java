@@ -4,17 +4,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 
+import com.h.common.core.page.PageDomain;
 import com.h.jq.domain.DTO.AreaCreateDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.h.common.annotation.Log;
 import com.h.common.core.controller.BaseController;
 import com.h.common.core.domain.AjaxResult;
@@ -42,10 +36,27 @@ public class AreasController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('jq:areas:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Areas areas)
-    {
+    public TableDataInfo list(
+            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "areaName", required = false) String areaName,
+            @RequestParam(value = "cityName", required = false) String cityName,
+            @RequestParam(value = "addressName", required = false) String addressText) {
+
+        // 创建查询条件对象
+        AreaCreateDTO queryParams = new AreaCreateDTO();
+        queryParams.setAreaName(areaName);
+        queryParams.setCityName(cityName);
+        queryParams.setaddressName(addressText);
+
+        // 设置分页
+        PageDomain pageDomain = new PageDomain();
+        pageDomain.setPageNum(pageNum);
+        pageDomain.setPageSize(pageSize);
+
+        // 执行查询
         startPage();
-        List<AreaCreateDTO> list = areasService.getAreaList();
+        List<AreaCreateDTO> list = areasService.getAreaList(queryParams);
         return getDataTable(list);
     }
 
